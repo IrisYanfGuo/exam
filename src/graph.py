@@ -9,12 +9,22 @@ class Graph(object):
         self.n_nodes = n_nodes
         self.nodes = [{} for i in range(0, n_nodes)]
 
-    def add_arc(self, src, dst, weigth=1):
+        # Optimization
+        self.succ_cache_valid = [ False for i in range(0,n_nodes) ]
+        self.succ_cache = [ [] for i in range(0,n_nodes) ]
+
+    def add_arc(self, src, dst, weigth = 1):
         if (dst < self.n_nodes and src != dst):
             self.nodes[src][dst] = weigth
+            self.succ_cache_valid[src] = False
 
     def successors(self, node):
-        return sorted(self.nodes[node].keys())
+        if self.succ_cache_valid[node]:
+            return self.succ_cache[node]
+
+        self.succ_cache[node] = sorted(self.nodes[node].keys())
+        self.succ_cache_valid[node] = True
+        return self.succ_cache[node]
 
 
 class RandomGraph(Graph):
