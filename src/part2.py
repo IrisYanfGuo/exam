@@ -45,16 +45,16 @@ class DCOPpart2(LJAL):
         return s
 
     def temperature(self):
-        return 1000* 0.94 ** self.step
+        return 1000* 0.96 ** self.step
 
     def alpha(self):
-        return 0.5
+        return 0.8
 
 
 
 # set the graph
 # independent learners
-n_samples = 100
+n_samples = 30000
 if len(sys.argv) > 1:
     n_samples = int(sys.argv[1])
 
@@ -105,7 +105,7 @@ LJAL_3 = AverageR(n_samples, lambda: DCOPpart2(graph=LJAL3_graph).n_steps(steps)
 end = timer()
 LJAL_3_delta = end - start
 
-'''
+
 print("Running JAL")
 start = timer()
 JAL = AverageR(n_samples, lambda: DCOPpart2(graph=FullGraph(7)).n_steps(steps))
@@ -115,14 +115,14 @@ JAL_delta = end - start
 timing = np.array([IL_delta, LJAL_2_delta, LJAL_3_delta, JAL_delta]) / JAL_delta
 print(timing)
 print(timing*JAL_delta)
-'''
+
 print("Plotting")
 plt.ylim(-10, 400)
-plt.plot(index, IL, index, LJAL_1, index,LJAL_2, index, LJAL_3)
-plt.legend(['IL','LJAL_1',"LJAL_2",'LJAL_3'])
+plt.plot(index, IL, index, LJAL_1, index,LJAL_2, index, LJAL_3,index,JAL)
+plt.legend(['IL','LJAL_1',"LJAL_2",'LJAL_3','JAL'])
 plt.ylabel('R')
-plt.savefig('part2.png')
-# plt.show()
+plt.savefig('part2_0.96_0.8_50000run.png')
+#plt.show()
 
 
 
